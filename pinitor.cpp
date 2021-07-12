@@ -159,7 +159,7 @@ void mycallback(char* szName) {
 /* ===================================================================== */
 
 // If you don't specify the the -o in command line, then the default output will be saved in pinitor.txt
-KNOB<string> KnobOutputFile(KNOB_MODE_WRITEONCE, "pintool",
+KNOB<std::string> KnobOutputFile(KNOB_MODE_WRITEONCE, "pintool",
     "o", "pinitor.out", "specify trace file name");
 
 /* ===================================================================== */
@@ -176,12 +176,12 @@ KNOB<string> KnobOutputFile(KNOB_MODE_WRITEONCE, "pintool",
 
 VOID AddInvokeFunctionToFile(CHAR * name, ADDRINT Arg1,ADDRINT Arg2 , ADDRINT Arg3, ADDRINT Arg4, ADDRINT Arg5, ADDRINT Arg6, ADDRINT Arg7, ADDRINT Arg8, ADDRINT Arg9, ADDRINT Arg10, ADDRINT Arg11, ADDRINT Arg12)
 {
-    TraceFile << name << "(" << Arg1 << ","<< Arg2 << "," << Arg3  << "," <<Arg4 << "," << Arg5 << "," << Arg6 << "," << Arg7 << "," << Arg8 << "," << Arg9 << "," << Arg10 << "," <<Arg11 << "," <<Arg12<< ")" << endl;
+    TraceFile << name << "(" << Arg1 << ","<< Arg2 << "," << Arg3  << "," <<Arg4 << "," << Arg5 << "," << Arg6 << "," << Arg7 << "," << Arg8 << "," << Arg9 << "," << Arg10 << "," <<Arg11 << "," <<Arg12<< ")" << std::endl;
 }
 
 VOID AddReturnResultsToFile(ADDRINT ret)
 {
-    TraceFile << "  returns " << ret << endl;
+    TraceFile << "  returns " << ret << std::endl;
 }
 
 
@@ -192,9 +192,9 @@ VOID AddReturnResultsToFile(ADDRINT ret)
 VOID Image(IMG img, VOID *v)
 {
 	// Showing which modules have been loaded
-	std::cout << endl << "====================================================================="<<endl;
+	std::cout << std::endl << "====================================================================="<<std::endl;
 	std::cout << "Module loaded : " << IMG_Name(img);
-	std::cout << endl << "====================================================================="<<endl;	
+	std::cout << std::endl << "====================================================================="<<std::endl;	
 	
 	// Call EnumExportedFunctions for every new loaded modules to enumerate every exported functions and create call to them
 	EnumExportedFunctions(IMG_Name(img).c_str(), mycallback);
@@ -250,20 +250,20 @@ INT32 Usage()
 {
 
 	// Print the banner
-	cerr << endl << "______ _       _ _             ";
-	cerr << endl << "| ___ (_)     (_) |            ";
-	cerr << endl << "| |_/ /_ _ __  _| |_ ___  _ __ ";
-	cerr << endl << "|  __/| | '_ \\| | __/ _ \\| '__|";
-	cerr << endl << "| |   | | | | | | || (_) | |   ";
-	cerr << endl << "\\_|   |_|_| |_|_|\\__\\___/|_|   ";
+	std::cerr << std::endl << "______ _       _ _             ";
+	std::cerr << std::endl << "| ___ (_)     (_) |            ";
+	std::cerr << std::endl << "| |_/ /_ _ __  _| |_ ___  _ __ ";
+	std::cerr << std::endl << "|  __/| | '_ \\| | __/ _ \\| '__|";
+	std::cerr << std::endl << "| |   | | | | | | || (_) | |   ";
+	std::cerr << std::endl << "\\_|   |_|_| |_|_|\\__\\___/|_|   ";
                                
-	cerr << endl<< endl << "Binvoke Pinitor [Version : 1.0] - An API Monitor Based on Pin" << endl <<endl;
-	cerr << "Source code is Available at : https://modules.binvoke.com/pinitor" << endl;
-    cerr << "This tool produces a trace of every calls to every exported Windows API" << endl;
-	cerr << "It automatically insert call to every functions in a dll even if they're not native API" << endl << endl;
-	cerr << "	Usage : Pin.exe -t Pinitor.dll -o output.txt -- Application.exe <Args to Application>" << endl << endl;
-	cerr << "--------------------------------------------------------------------------------------------" << endl;
-    cerr << endl << KNOB_BASE::StringKnobSummary() << endl;
+	std::cerr << std::endl<< std::endl << "Binvoke Pinitor [Version : 1.0] - An API Monitor Based on Pin" << std::endl <<std::endl;
+	std::cerr << "Source code is Available at : https://modules.binvoke.com/pinitor" << std::endl;
+    std::cerr << "This tool produces a trace of every calls to every exported Windows API" << std::endl;
+	std::cerr << "It automatically insert call to every functions in a dll even if they're not native API" << std::endl << std::endl;
+	std::cerr << "	Usage : Pin.exe -t Pinitor.dll -o output.txt -- Application.exe <Args to Application>" << std::endl << std::endl;
+	std::cerr << "--------------------------------------------------------------------------------------------" << std::endl;
+    std::cerr << std::endl << KNOB_BASE::StringKnobSummary() << std::endl;
     return -1;
 }
 
@@ -283,10 +283,10 @@ int main(int argc, char *argv[])
         return Usage();
     }
     
-    // Write to a file since cout and cerr maybe closed by the application
+    // Write to a file since cout and std::cerr maybe closed by the application
     TraceFile.open(KnobOutputFile.Value().c_str());
-    TraceFile << hex;
-    TraceFile.setf(ios::showbase);
+    TraceFile << std::hex;
+    TraceFile.setf(std::ios::showbase);
     
     // Register Image to be called to instrument functions.
     IMG_AddInstrumentFunction(Image, 0);
